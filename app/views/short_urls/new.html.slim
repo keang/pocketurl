@@ -1,0 +1,8 @@
+h2 Shorten a url
+br
+=form_for(ShortUrl.new) do |f|
+
+  =f.label :original_url, "URL"
+  =f.text_field :original_url, auto_focus: true
+
+  =f.submit "Shorten"
