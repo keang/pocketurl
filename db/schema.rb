@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20161229033428) do
     t.string   "original_url", null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.index ["short_path"], name: "index_short_urls_on_short_path", unique: true, using: :btree
   end
 
 end

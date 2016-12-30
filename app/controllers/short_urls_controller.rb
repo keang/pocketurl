@@ -6,7 +6,6 @@ class ShortUrlsController < ApplicationController
     if short_url.save
       redirect_to short_url
     else
-      byebug
       render 'new'
     end
   end
