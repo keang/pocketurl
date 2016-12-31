@@ -1,13 +1,16 @@
 require 'rails_helper'
-require 'webmock/rspec'
 
 RSpec.describe UrlValidator do
 
   class TestClass
-    attr_accessor :url
+    attr_accessor :url, :errors
 
     def valid?
       UrlValidator.new(field: :url).validate(self)
+    end
+
+    def errors
+      @errors ||= { url: [] }
     end
   end
 
@@ -33,6 +36,7 @@ RSpec.describe UrlValidator do
         expect(record).to be_valid
       else
         expect(record).to_not be_valid
+        expect(record.errors[:url]).to_not be_empty
       end
     end
   end

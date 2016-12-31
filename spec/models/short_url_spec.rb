@@ -1,14 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe ShortUrl, type: :model do
+  let(:url_200) { "https://example.com/200" }
+  before { stub_request(:head, url_200).to_return(status: 200) }
+
   describe "creating new record" do
-    subject { ShortUrl.create!(original_url: "https://example.com") }
+    subject { ShortUrl.create!(original_url:url_200) }
 
     it { expect(subject).to be_persisted }
     it { expect(subject.short_path).to match(/([A-Za-z0-9\-_]){6}/) }
 
     context "SecureRandom collides" do
-      let(:existing_short_url) { ShortUrl.create(original_url: "https://example.com",
+      let(:existing_short_url) { ShortUrl.create(original_url:url_200,
                                                   short_path: "abcde") }
       before do
         allow(SecureRandom).to receive(:urlsafe_base64).and_return('colliding_string', 'colliding_string', 'new_string')
@@ -22,30 +25,13 @@ RSpec.describe ShortUrl, type: :model do
     end
 
     describe "original_url validation" do
-      valid_urls = ["example.com",
-                    "https://example.com/abc?as#test",
-                    "https://goo.gl/maps/GFjztXL2",
-                    "http://example.io"]
-      invalid_urls = ["postgres://example.com",
-                      "https://.com",
-                      "http://example"]
-
-      valid_urls.each do |url|
-        it "does not raise validation error for #{url}" do
-          expect {
-            ShortUrl.create!(original_url: url)
-          }.not_to raise_error
-        end
+      it "invalidates with response 500" do
+        url_500 = "https://example.com/500"
+        stub_request(:head, url_500).to_return(status: 500)
+        short_url = ShortUrl.new(original_url: url_500)
+        expect(short_url).to_not be_valid
+        expect(short_url.errors).to_not be_empty
       end
-
-      invalid_urls.each do |url|
-        it "raises validation error for #{url}" do
-          expect {
-            ShortUrl.create!(original_url: url)
-          }.to raise_error ActiveRecord::RecordInvalid
-        end
-      end
-
     end
   end
 end

@@ -9,6 +9,7 @@
 #   end
 #
 class UrlValidator < ActiveModel::Validator
+  VALID_CLASSES = [Net::HTTPSuccess, Net::HTTPRedirection]
 
   # Tries to make a HEAD request to the url found in the
   # given field.
@@ -24,8 +25,14 @@ class UrlValidator < ActiveModel::Validator
                     use_ssl: uri.scheme == 'https') do |http|
       request = Net::HTTP::Head.new uri
       response = http.request request
-      return response.is_a?(Net::HTTPSuccess) ||
-        response.is_a?(Net::HTTPRedirection)
+
+      is_valid(response).tap do |valid|
+        record.errors[url_column] << (options[:message] || "is an invalid URL") unless valid
+      end
     end
+  end
+
+  def is_valid(response)
+    VALID_CLASSES.any? { |klass| response.is_a? klass }
   end
 end
