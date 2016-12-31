@@ -4,6 +4,7 @@ RSpec.describe 'tracking' do
   let(:short_url) { ShortUrl.create(original_url: "https://original.com") }
 
   subject do
+    page.driver.header('User-Agent', 'SOME_USER_AGENT_STRING')
     visit short_url.short_path
   end
 
