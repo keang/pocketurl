@@ -45,6 +45,7 @@ end
 
 group :test do
   gem 'webmock'
+  gem 'show_me_the_cookies'
 end
 
 group :development do
