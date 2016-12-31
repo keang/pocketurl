@@ -3,9 +3,7 @@ class ShortUrl < ApplicationRecord
   validates :short_path, presence: true
 
   validates :original_url, presence: true
-  # TODO: breakdown and validate each url components,
-  # because the regex can be slow for very long url
-  validates_format_of :original_url, :with => /\A(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?/i
+  validates_with UrlValidator, field: :original_url
 
   def generate_short_path
     self.short_path = SecureRandom.urlsafe_base64(6)
