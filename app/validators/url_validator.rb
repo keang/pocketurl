@@ -1,4 +1,21 @@
+# UrlValidator checks if a given field is a valid, i.e. live
+# url.
+#
+# The attribute to be checked should be passed in as +:field+
+# option, for example:
+#
+#   class MyModel < ApplicationRecord
+#     validates_with UrlValidator, field: :my_url
+#   end
+#
 class UrlValidator < ActiveModel::Validator
+
+  # Tries to make a HEAD request to the url found in the
+  # given field.
+  #
+  # Responses of codes 200, 301 and 302 (Net::HTTPSuccess and
+  # Net::HTTPRedirection) are accepted as valid urls.
+  #
   def validate(record)
     url_column = options[:field]
     uri = URI(record.send(url_column))
