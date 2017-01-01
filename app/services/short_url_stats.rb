@@ -20,9 +20,9 @@ class ShortUrlStats
     all_visits.group_by(&:uid).collect do |uid, user_visits|
       {
         uid: uid,
-        ips: user_visits.pluck(:ip),
-        user_agents: user_visits.pluck(:user_agent),
-        referrers: user_visits.pluck(:referrer)
+        ips: user_visits.pluck(:ip).uniq,
+        user_agents: user_visits.pluck(:user_agent).uniq,
+        referrers: user_visits.pluck(:referrer).uniq
       }
     end
   end
