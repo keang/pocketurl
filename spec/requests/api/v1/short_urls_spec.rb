@@ -32,5 +32,9 @@ RSpec.describe 'api/v1/short_urls requests' do
   end
 
 
-  it "returns 404 error if short_url is not found"
+  it "returns 404 error if short_url is not found" do
+    expect {
+      get api_v1_short_url_path, params: { original_url: "https://non-existent.com" }
+    }.to raise_error ActiveRecord::RecordNotFound
+  end
 end

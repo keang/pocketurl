@@ -8,6 +8,6 @@ class Api::V1::ShortUrlsController < ApplicationController
   def current_short_url
     @short_url ||= ShortUrl.where(short_path: params[:short_path]).
                      or(ShortUrl.where(original_url: params[:original_url])).
-                     first
+                     first!
   end
 end
