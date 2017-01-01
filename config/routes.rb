@@ -4,4 +4,7 @@ Rails.application.routes.draw do
   root 'short_urls#new'
 
   get '/:short_path', to: 'visits#new'
+  get '/api/v1/short_url',
+    to: 'api/v1/short_urls#show',
+    defaults: {format: :json}
 end

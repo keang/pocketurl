@@ -7,7 +7,7 @@ RSpec.describe 'api/v1/short_urls requests' do
   let!(:visits) { create_list(:visit, rand(100), short_url: short_url) }
 
   it "returns the stats about the queried short_url" do
-    get api_v1_short_url_path, short_path: short_url.short_path
+    get api_v1_short_url_path, params: { short_path: short_url.short_path }
     expect(response).to be_ok
 
     response_hash = JSON.parse(response.body)
@@ -16,8 +16,9 @@ RSpec.describe 'api/v1/short_urls requests' do
       "original_url" => short_url.original_url,
       "visits" => {
         "count" => visits.count,
-        "uniq_devices" => visits.pluck(:uid).uniq.count
-      }
+        "unique_devices_count" => visits.pluck(:uid).uniq.count
+      },
+      "devices" => be_an(Array)
     }
     expect(response_hash).to match(expected_hash)
   end
