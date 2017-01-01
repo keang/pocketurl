@@ -22,7 +22,8 @@ class ShortUrlStats
         uid: uid,
         ips: user_visits.pluck(:ip).uniq,
         user_agents: user_visits.pluck(:user_agent).uniq,
-        referrers: user_visits.pluck(:referrer).uniq
+        referrers: user_visits.pluck(:referrer).uniq,
+        visit_timestamps: user_visits.pluck(:created_at).sort
       }
     end
   end

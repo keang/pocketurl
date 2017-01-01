@@ -12,7 +12,7 @@ RSpec.describe 'api/v1/short_urls requests' do
       "count" => visits.count,
       "unique_devices_count" => visits.pluck(:uid).uniq.count
     },
-    "devices" => be_an(Array)
+    "devices" => be_an(Array)  # See detailed specs at spec/services/short_url_stats_spec.rb
   } }
 
   it "returns the stats when queried by short_path" do
