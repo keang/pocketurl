@@ -2,3 +2,6 @@ p Your new short url:
 a href=full_url_for(@short_url)
   h3= full_url_for(@short_url)
 
+a href=api_v1_short_url_path(short_path: @short_url.short_path)
+  p Stats
+
