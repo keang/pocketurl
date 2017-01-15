@@ -1,4 +1,4 @@
-# UrlValidator checks if a given field is a valid, i.e. live
+# UrlValidator checks if a given field is a valid url, i.e. live
 # url.
 #
 # The attribute to be checked should be passed in as +:field+

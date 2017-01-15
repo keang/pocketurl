@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ShortUrl, type: :model do
-  let(:url_200) { "https://example.com/200" }
+  let(:url_200) { "http://example.com/200" }
   before { stub_request(:head, url_200).to_return(status: 200) }
 
   describe "creating new record" do
@@ -31,6 +31,12 @@ RSpec.describe ShortUrl, type: :model do
         short_url = ShortUrl.new(original_url: url_500)
         expect(short_url).to_not be_valid
         expect(short_url.errors).to_not be_empty
+      end
+
+      it "prepends http if not provided" do
+        su = ShortUrl.new(original_url: "example.com/200")
+        expect { su.save!  }.not_to raise_error
+        expect(su.original_url).to eq "http://example.com/200"
       end
     end
   end
